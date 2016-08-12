@@ -1,0 +1,3 @@
+rootProject.name = 'AmISafeTwo'
+
+include ':app'
