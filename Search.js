@@ -1,7 +1,8 @@
 import styles            from './styles.js'
+import SearchButton      from './SearchButton'
 import ajax              from './ajaxAdapter.js'
 import React, { Component } from 'react';
-import {Container, Content, Card, CardItem} from 'native-base';
+import {Container, Content, Card, CardItem, Button, Icon} from 'native-base';
 import {
   AppRegistry,
   StyleSheet,
@@ -20,16 +21,29 @@ import {
 var Search =React.createClass({
   getInitialState: function() {
     return {
-      text: '',
-      search:false
+      address: '',
+      search:false,
+      searchLong: this.props.long,
+      searchLat: this.props.lat,
+      locate: true
     }
   },
-
-  onSubmit: function(){
-    console.log(this.state)
+  _onPress: function(){
+    let here= this
+    ajax.getAddress(this.state.address).then(data=>{
+      console.log('this is the', data)
+      this.setState({
+        search: true,
+        searchLong: data.lng,
+        searchLat: data.lat,
+        locate: false
+      })
+      console.log(state)
+    })
   },
+
+
   _renderList: function(){
-    console.log('rendering')
     return(
       <View>
 
@@ -55,7 +69,6 @@ var Search =React.createClass({
   render: function(){
     let felonies;
     if(this.props.data !== undefined){
-      console.log(this.props)
       felonies= (
         this._renderList())
     } else{
@@ -64,20 +77,18 @@ var Search =React.createClass({
     return (
       <View style={{marginTop: 25}}>
       <TextInput style={{margin: 10, height: 40, borderColor: 'gray', borderWidth: 1}}
-        onChangeText={(text) => this.setState({text})}
-        value={this.state.text}
-        blurOnSubmit={true}
-        onBlur={this.onSubmit()}
-      />
+        onChangeText={(text) => this.setState({address: text})}
+        value={this.state.address} />
+      <Button block success
+        onPress={this._onPress}>
+        Search
+      </Button>
       <MapView
         style={{height: 200, flex:1}}
         showsUserLocation={true}
-        followUserLocation={true}      />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => { _scrollView.scrollTo({y: 0}); }}>
-          <Text>SAVE LOCATION</Text>
-        </TouchableOpacity>
+        followUserLocation= {this.state.locate}
+        region={{latitude: parseFloat(this.state.searchLat), longitude: parseFloat(this.state.searchLat)}}      />
+
         <ScrollView
                 ref={(scrollView) => { _scrollView = scrollView; }}
                 automaticallyAdjustContentInsets={false}

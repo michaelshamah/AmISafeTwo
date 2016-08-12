@@ -56,9 +56,9 @@ class AmISafeTwo extends Component {
             this.setState({
               selectedTab: 'tab1',
             });
-            console.log(this.state)
           }}>
-          <Search data={this.state.data}/>
+          <Search data={this.state.data} long={this.state.longitude}
+          lat={this.state.latitude} />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           systemIcon="contacts"
@@ -67,7 +67,6 @@ class AmISafeTwo extends Component {
             this.setState({
               selectedTab: 'tab2',
             });
-            console.log(this.state)
           }}>
           <Login />
         </TabBarIOS.Item>

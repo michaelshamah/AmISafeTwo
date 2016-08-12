@@ -15,8 +15,8 @@ const ajaxAdapter ={
     })
   },
   getAddress(address){
-    console.log(address)
-    return fetch(`http://localhost:3000/felonies?address=${address}`, {
+    console.log('mine')
+    return fetch(`http://localhost:3000/felonies/address?address=${address}`, {
     method: "GET",
       headers: {
         "Content-type": "application/json; charset=UTF-8"
