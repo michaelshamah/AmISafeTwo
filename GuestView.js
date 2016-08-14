@@ -18,52 +18,12 @@ import {
 } from 'react-native';
 
 
-var Search =React.createClass({
+var GuestView =React.createClass({
   getInitialState: function() {
     return {
-      address: '',
-      search:false,
-      searchLong: this.props.long,
-      searchLat: this.props.lat,
-      locate: true,
       data: this.props.data
     }
   },
-  _onPress: function(){
-    let here= this
-    console.log(this.state)
-    ajax.getAddress(this.state.address).then(data=>{
-      this.setState({
-        search: true,
-        searchLong: data.lng,
-        searchLat: data.lat,
-        locate: false
-      })
-      ajax.getFelonies(data.lng, data.lat).then(data=>{
-        let lastfive=[]
-        let i= data.length-1
-        while (i >= 0){
-          lastfive.push(data[i])
-          i--
-          if (i<= data.length-6){
-            break
-          }
-        }
-        here.setState({data: lastfive})
-      })
-    })
-
-  },
-  _onSave(){
-    let location={
-      user: this.props.user,
-      address: this.state.address
-    }
-    ajax.addNewLocation(location).then(data=>{
-      console.log(data)
-    })
-  },
-
   _renderList: function(){
     let list
     if (this.state.search){
@@ -103,23 +63,11 @@ var Search =React.createClass({
     }
     return (
       <View style={{marginTop: 25}}>
-      <TextInput style={{margin: 10, height: 40, borderColor: 'gray', borderWidth: 1}}
-        onChangeText={(text) => this.setState({address: text})}
-        value={this.state.address} />
-      <Button block success
-        onPress={this._onPress}>
-        Search
-      </Button>
       <MapView
         style={{height: 200, flex:1}}
         showsUserLocation={true}
-        followUserLocation= {this.state.locate}
-        region={{latitude: parseFloat(this.state.searchLat), longitude: parseFloat(this.state.searchLong)}} annotations={[{
-      longitude: parseFloat(this.state.searchLong),
-      latitude: parseFloat(this.state.searchLat),
-      title: 'SEARCHED LOCATION',
-    }]}    />
-      <Button primary block onPress={this._onSave}> Save location</Button>
+        followUserLocation= {true}    />
+
         <ScrollView
                 ref={(scrollView) => { _scrollView = scrollView; }}
                 automaticallyAdjustContentInsets={false}
@@ -133,4 +81,4 @@ var Search =React.createClass({
   }
 })
 
-export default Search
+export default GuestView

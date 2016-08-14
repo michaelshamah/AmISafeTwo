@@ -5,12 +5,13 @@
  */
 
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, TabBarIOS, MapView, TextInput,ScrollView, TouchableOpacity, Image, ListView } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View, TabBarIOS, MapView, TextInput,ScrollView, TouchableOpacity, Image, ListView, AsyncStorage } from 'react-native';
 import UserPage          from './UserPage.js'
 import Search            from './Search.js'
+import GuestView         from './GuestView.js'
+import Login             from './Login.js';
 import styles            from './styles.js'
 import ajax              from './ajaxAdapter.js'
-import Login from './Login.js'
 
 class AmISafeTwo extends Component {
   constructor(props) {
@@ -21,6 +22,8 @@ class AmISafeTwo extends Component {
       latitude: 'unknown',
       data: ['noting found'],
       text: '',
+      user: undefined,
+      user_id: undefined
     };
   }
   componentDidMount() {
@@ -34,48 +37,87 @@ class AmISafeTwo extends Component {
         this.setState({longitude: initialPosition, latitude: latitudePostiton});
 
         ajax.getFelonies(initialPosition, latitudePostiton).then(data=>{
-          lastfive=[]
-          for (var i= data.length-1; (i> data.length-6 || i< 0); i--){
+          let lastfive=[]
+          let i= data.length-1
+          while (i >= 0){
             lastfive.push(data[i])
+            i--
+            if (i<= data.length-6){
+              break
+            }
           }
           here.setState({data: lastfive})
-          console.log('do this', here.state.data)
-       })
-        console.log('do this next', here.state)
+        })
       }
     )
   }
 
+   loggedIn(user) {
+    console.log(user)
+    this.setState({user: user.name,
+      user_id: user.user})
+    console.log('logginin', this.state.user_id)
+  }
+  loggedOut() {
+    this.setState({user: undefined,
+      user_id: undefined})
+  }
   render() {
-    return (
-      <TabBarIOS
-        unselectedTintColor="blue"
-        tintColor="white"
-        barTintColor="red">
-        <TabBarIOS.Item
-          systemIcon="search"
-          selected={this.state.selectedTab === 'tab1'}
-          onPress={() => {
-            this.setState({
-              selectedTab: 'tab1',
-            });
-          }}>
-          <Search data={this.state.data} long={this.state.longitude}
-          lat={this.state.latitude} />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          systemIcon="contacts"
-          selected={this.state.selectedTab === 'tab2'}
-          onPress={() => {
-            this.setState({
-              selectedTab: 'tab2',
-            });
-          }}>
-          <Login />
-        </TabBarIOS.Item>
+    if(this.state.user=== 'guest'){
+      return(
+        <TabBarIOS
+          unselectedTintColor="blue"
+          tintColor="white"
+          barTintColor="red">
+          <TabBarIOS.Item
+            systemIcon="search"
+            selected={this.state.selectedTab === 'tab1'}
+            onPress={() => {
+              this.setState({
+                selectedTab: 'tab1',
+              });
+            }}>
+            <GuestView data={this.state.data}  />
+          </TabBarIOS.Item>
         </TabBarIOS>
+      )
+    } else if (this.state.user){
+      return (
+        <TabBarIOS
+          unselectedTintColor="blue"
+          tintColor="white"
+          barTintColor="red">
+          <TabBarIOS.Item
+            systemIcon="search"
+            selected={this.state.selectedTab === 'tab1'}
+            onPress={() => {
+              this.setState({
+                selectedTab: 'tab1',
+              });
+            }}>
+            <Search data={this.state.data} long={this.state.longitude}
+            lat={this.state.latitude} user={this.state.user_id} />
+          </TabBarIOS.Item>
+          <TabBarIOS.Item
+            systemIcon="contacts"
+            selected={this.state.selectedTab === 'tab2'}
+            onPress={() => {
+              this.setState({
+                selectedTab: 'tab2',
+              });
+            }}>
+            <UserPage user={this.state.user} user_id={this.state.user_id} loggedOut= {this.loggedOut.bind(this)} />
+          </TabBarIOS.Item>
+          </TabBarIOS>
 
-    );
+       );
+    } else {
+      return(
+        <View>
+          <Login loggedIn= {this.loggedIn.bind(this)} />
+        </View>
+      )
+    }
   }
 }
 
