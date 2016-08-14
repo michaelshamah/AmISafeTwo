@@ -24,6 +24,7 @@ class AmISafeTwo extends Component {
     };
   }
   componentDidMount() {
+
     let here=this
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -38,7 +39,9 @@ class AmISafeTwo extends Component {
             lastfive.push(data[i])
           }
           here.setState({data: lastfive})
+          console.log('do this', here.state.data)
        })
+        console.log('do this next', here.state)
       }
     )
   }

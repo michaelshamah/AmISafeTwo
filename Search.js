@@ -25,29 +25,51 @@ var Search =React.createClass({
       search:false,
       searchLong: this.props.long,
       searchLat: this.props.lat,
-      locate: true
+      locate: true,
+      data: this.props.data
     }
   },
   _onPress: function(){
     let here= this
     ajax.getAddress(this.state.address).then(data=>{
-      console.log('this is the', data)
       this.setState({
         search: true,
         searchLong: data.lng,
         searchLat: data.lat,
         locate: false
       })
-      console.log(state)
+      ajax.getFelonies(data.lng, data.lat).then(data=>{
+        let lastfive=[]
+        let i= data.length-1
+        while (i >= 0){
+          lastfive.push(data[i])
+          i--
+          if (i<= data.length-6){
+            break
+          }
+        }
+        // for (var i= data.length-1; (i> data.length-6 || i< 0); i--){
+        //   console.log(i)
+        //   lastfive.push(data[i])
+        // }
+        here.setState({data: lastfive})
+      })
     })
+
   },
 
 
   _renderList: function(){
+    let list
+    if (this.state.search){
+      list=this.state.data
+    } else{
+      list=this.props.data
+    }
     return(
       <View>
 
-          {this.props.data.map((felony, id)=>{
+          {list.map((felony, id)=>{
             return (
               <Card key={id} style={{margin: 5}}>
                 <CardItem header>
@@ -87,7 +109,11 @@ var Search =React.createClass({
         style={{height: 200, flex:1}}
         showsUserLocation={true}
         followUserLocation= {this.state.locate}
-        region={{latitude: parseFloat(this.state.searchLat), longitude: parseFloat(this.state.searchLat)}}      />
+        region={{latitude: parseFloat(this.state.searchLat), longitude: parseFloat(this.state.searchLong)}} annotations={[{
+      longitude: parseFloat(this.state.searchLong),
+      latitude: parseFloat(this.state.searchLat),
+      title: 'You Are Here',
+    }]}    />
 
         <ScrollView
                 ref={(scrollView) => { _scrollView = scrollView; }}

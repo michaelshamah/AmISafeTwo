@@ -4,6 +4,7 @@ import UserPage          from './UserPage.js'
 import Search            from './Search.js'
 import styles            from './styles.js'
 import ajax              from './ajaxAdapter.js'
+import {Container, Content, List, ListItem, InputGroup, Input, Icon, Button} from 'native-base';
 const FBSDK = require('react-native-fbsdk');
 const {
   LoginButton,
@@ -16,29 +17,40 @@ var Login = React.createClass({
   },
   render: function() {
     return (
-      <View>
-        <Text style= {styles.welcome}>
-        hello
-        </Text>
-        <LoginButton
-          publishPermissions={["publish_actions"]}
-          onLoginFinished={
-            (error, result) => {
-              if (error) {
-                alert("Login failed with error: " + result.error);
-              } else if (result.isCancelled) {
-                alert("Login was cancelled");
-              } else {
-                AccessToken.getCurrentAccessToken().then(
-                  (data) => {
-                    alert(data.accessToken.toString())
-                  }
-                )
-              }
-
-            }
-          }
-          onLogoutFinished={() => alert("User logged out")} />
+      <View style= {{flex: 1, margin: 20}}>
+        <List>
+          <ListItem>
+            <InputGroup>
+                <Input  inlineLabel label="EMAIL" placeholder="example@example.com" />
+            </InputGroup>
+          </ListItem>
+          <ListItem>
+            <InputGroup>
+              <Input  inlineLabel label="PASSWORD" secureTextEntry={true}/>
+            </InputGroup>
+          </ListItem>
+          <ListItem>
+            <InputGroup >
+              <Input inlineLabel label="NAME" placeholder="Jonny Appleseed"/>
+            </InputGroup>
+          </ListItem>
+        </List>
+        <Button info block> Sign Up
+        </Button>
+        <List style={{marginTop: 30}}>
+          <ListItem>
+            <InputGroup>
+                <Input  inlineLabel label="EMAIL" placeholder="example@example.com" />
+            </InputGroup>
+          </ListItem>
+          <ListItem>
+            <InputGroup>
+              <Input  inlineLabel label="PASSWORD" secureTextEntry={true} placeholder="here" on/>
+            </InputGroup>
+          </ListItem>
+        </List>
+        <Button warning block> Login
+        </Button>
       </View>
     );
   }
