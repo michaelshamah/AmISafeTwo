@@ -24,7 +24,8 @@ class AmISafeTwo extends Component {
       data: ['noting found'],
       text: '',
       user: undefined,
-      user_id: undefined
+      user_id: undefined,
+      locations:[]
     };
   }
   componentDidMount() {
@@ -66,6 +67,13 @@ class AmISafeTwo extends Component {
   loggedOut() {
     this.setState({user: undefined,
       user_id: undefined})
+  }
+  getLocations(){
+    let here=this
+    ajax.getLocations(this.props.user_id).then(data=>{
+      console.log(data)
+      here.setState({locations: data})
+    })
   }
   render() {
     if(this.state.user === 'guest'){
