@@ -33,7 +33,7 @@ var Login = React.createClass({
     })
   },
   _OnPressGuest() {
-    this.props.loggedIn('guest')
+    this.props.loggedInGuest('guest')
   },
 
   render: function() {
@@ -73,7 +73,7 @@ var Login = React.createClass({
         </List>
         <Button warning block onPress={this._onPressTwo}> Login
         </Button>
-        <Text> OR </Text>
+        <Text style={styles.welcome}> OR </Text>
         <Button primary block onPress={this._OnPressGuest}> Sign in as Guest
         </Button>
       </View>

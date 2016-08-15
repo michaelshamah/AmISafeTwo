@@ -94,6 +94,12 @@ var Search =React.createClass({
   },
 
   render: function(){
+    let save
+    if (this.state.search){
+      save = (
+        <Button primary block onPress={this._onSave}> Save location</Button>
+        )
+    }
     let felonies;
     if(this.props.data !== undefined){
       felonies= (
@@ -119,7 +125,7 @@ var Search =React.createClass({
       latitude: parseFloat(this.state.searchLat),
       title: 'SEARCHED LOCATION',
     }]}    />
-      <Button primary block onPress={this._onSave}> Save location</Button>
+      {save}
         <ScrollView
                 ref={(scrollView) => { _scrollView = scrollView; }}
                 automaticallyAdjustContentInsets={false}

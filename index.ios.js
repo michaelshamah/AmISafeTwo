@@ -17,6 +17,7 @@ class AmISafeTwo extends Component {
   constructor(props) {
     super(props)
     this.state= {
+      selected: true,
       selectedTab: 'tab1',
       longitude: 'unknown',
       latitude: 'unknown',
@@ -56,19 +57,23 @@ class AmISafeTwo extends Component {
     console.log(user)
     this.setState({user: user.name,
       user_id: user.user})
-    console.log('logginin', this.state.user_id)
+    console.log('logginin', this.state.user)
+  }
+  loggedInGuest(user) {
+    console.log(user)
+    this.setState({user: user})
   }
   loggedOut() {
     this.setState({user: undefined,
       user_id: undefined})
   }
   render() {
-    if(this.state.user=== 'guest'){
+    if(this.state.user === 'guest'){
       return(
         <TabBarIOS
-          unselectedTintColor="blue"
+          unselectedTintColor="black"
           tintColor="white"
-          barTintColor="red">
+          barTintColor="#BBDEFB">
           <TabBarIOS.Item
             systemIcon="search"
             selected={this.state.selectedTab === 'tab1'}
@@ -84,9 +89,9 @@ class AmISafeTwo extends Component {
     } else if (this.state.user){
       return (
         <TabBarIOS
-          unselectedTintColor="blue"
+          unselectedTintColor="black"
           tintColor="white"
-          barTintColor="red">
+          barTintColor="#BBDEFB">
           <TabBarIOS.Item
             systemIcon="search"
             selected={this.state.selectedTab === 'tab1'}
@@ -114,7 +119,7 @@ class AmISafeTwo extends Component {
     } else {
       return(
         <View>
-          <Login loggedIn= {this.loggedIn.bind(this)} />
+          <Login loggedIn= {this.loggedIn.bind(this)} loggedInGuest= {this.loggedInGuest.bind(this)} />
         </View>
       )
     }

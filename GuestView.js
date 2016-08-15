@@ -62,7 +62,7 @@ var GuestView =React.createClass({
       felonies= (<Text> NO DATA </Text>)
     }
     return (
-      <View style={{marginTop: 25}}>
+      <View style={{marginTop: 25, flex: 1}}>
       <MapView
         style={{height: 200, flex:1}}
         showsUserLocation={true}

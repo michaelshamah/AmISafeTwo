@@ -15,7 +15,6 @@ const ajaxAdapter ={
     })
   },
   getAddress(address){
-    console.log('mine')
     return fetch(`http://localhost:3000/felonies/address?address=${address}`, {
     method: "GET",
       headers: {
@@ -28,7 +27,6 @@ const ajaxAdapter ={
     })
   },
     addNewUser(name, email, password){
-    console.log(name, email, password)
     return fetch(`http://localhost:3000/users/new`, {
       method: 'POST',
       headers: {
@@ -45,7 +43,6 @@ const ajaxAdapter ={
     })
   },
   loginUser(email, password){
-    console.log(email, password)
     return fetch(`http://localhost:3000/api/authenticate/:id`, {
       method: 'POST',
       headers: {
@@ -61,7 +58,6 @@ const ajaxAdapter ={
     })
   },
   addNewLocation(location){
-    console.log('adding', location)
     return fetch(`http://localhost:3000/locations/new`, {
       method: 'POST',
       headers: {
