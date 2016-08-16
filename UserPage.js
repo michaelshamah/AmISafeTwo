@@ -30,7 +30,7 @@ class UserPage extends Component {
                 <Text>
                   {address.address}
                 </Text>
-                <Button warning rounded value={address.location_id} onPress={this._onPress} >
+                <Button warning rounded >
                   Delete location
                 </Button>
               </CardItem>
