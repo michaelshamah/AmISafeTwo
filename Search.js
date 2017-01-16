@@ -55,12 +55,14 @@ var Search =React.createClass({
 
   },
   _onSave(){
+    let here=this
     let location={
       user: this.props.user,
       address: this.state.address
     }
     ajax.addNewLocation(location).then(data=>{
       console.log(data)
+      here.props.getLocations()
     })
   },
 

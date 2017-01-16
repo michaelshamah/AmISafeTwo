@@ -10,9 +10,11 @@ var Login = React.createClass({
 
   getInitialState: function() {
     return {
-      email: undefined,
-      name: undefined,
-      password: undefined
+      emailLogin: undefined,
+      emailCreate: undefined,
+      nameCreate: undefined,
+      passwordLogin: undefined,
+      passwordCreate: undefined
     }
   },
 
@@ -21,14 +23,17 @@ var Login = React.createClass({
   },
 
   _onPress() {
-    console.log(this.state)
-    ajax.addNewUser(this.state.email, this.state.name, this.state.password).then(data=>{
+    ajax.addNewUser( this.state.nameCreate, this.state.emailCreate, this.state.passwordCreate).then(data=>{
       console.log(data)
+      ajax.loginUser(this.state.emailCreate, this.state.passwordCreate).then(data=>{
+        console.log(data)
+        this.props.loggedIn(data)
+      })
     })
   },
 
   _onPressTwo() {
-    ajax.loginUser(this.state.email, this.state.password).then(data=>{
+    ajax.loginUser(this.state.emailLogin, this.state.passwordLogin).then(data=>{
       this.props.loggedIn(data)
     })
   },
@@ -42,18 +47,18 @@ var Login = React.createClass({
         <List>
           <ListItem>
             <InputGroup>
-                <Input  inlineLabel label="EMAIL" placeholder="example@example.com" onChangeText={(text) => this.setState({email: text})} />
+                <Input  inlineLabel label="EMAIL" placeholder="example@example.com" onChangeText={(text) => this.setState({emailCreate: text})} />
             </InputGroup>
           </ListItem>
           <ListItem>
             <InputGroup>
-              <Input  inlineLabel label="PASSWORD" secureTextEntry={true} onChangeText={(text) => this.setState({password: text})}/>
+              <Input  inlineLabel label="PASSWORD" secureTextEntry={true} onChangeText={(text) => this.setState({passwordCreate: text})}/>
             </InputGroup>
           </ListItem>
           <ListItem>
             <InputGroup >
               <Input inlineLabel label="NAME" placeholder="Jonny Appleseed"
-              onChangeText={(text) => this.setState({name: text})}/>
+              onChangeText={(text) => this.setState({nameCreate: text})}/>
             </InputGroup>
           </ListItem>
         </List>
@@ -62,12 +67,12 @@ var Login = React.createClass({
         <List style={{marginTop: 30}}>
           <ListItem>
             <InputGroup>
-                <Input  inlineLabel label="EMAIL" placeholder="example@example.com" onChangeText={(text) => this.setState({email: text})}/>
+                <Input  inlineLabel label="EMAIL" placeholder="example@example.com" onChangeText={(text) => this.setState({emailLogin: text})}/>
             </InputGroup>
           </ListItem>
           <ListItem>
             <InputGroup>
-              <Input  inlineLabel label="PASSWORD" secureTextEntry={true}  onChangeText={(text) => this.setState({password: text})}/>
+              <Input  inlineLabel label="PASSWORD" secureTextEntry={true}  onChangeText={(text) => this.setState({passwordLogin: text})}/>
             </InputGroup>
           </ListItem>
         </List>

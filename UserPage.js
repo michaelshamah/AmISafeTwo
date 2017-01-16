@@ -1,37 +1,35 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, TabBarIOS, MapView, TextInput,ScrollView, TouchableOpacity, Image, ListView } from 'react-native';
-import {Card, CardItem, InputGroup, Input, Icon, Button} from 'native-base';
+import {Card, CardItem, InputGroup, Input, Button} from 'native-base';
 import styles            from './styles.js'
 import ajax              from './ajaxAdapter.js'
 class UserPage extends Component {
   constructor(props) {
     super(props)
     this.state= {
-      locations:[],
     };
   }
   componentDidMount(){
-    let here=this
-    ajax.getLocations(this.props.user_id).then(data=>{
-      console.log(data)
-      here.setState({locations: data})
-    })
+    this.props.getLocations()
+    console.log(this.props.locations)
   }
   _onPress(event){
-    console.log(event.target)
+    console.log(event.target.value)
   }
   _renderList() {
+    console.log(this.props.locations)
+    if (this.props.locations){
     return(
       <View>
-        {this.state.locations.map((address, id)=>{
+        {this.props.locations.map((address, id)=>{
           return (
             <Card key={id} style={{margin: 5}}>
               <CardItem header>
                 <Text>
                   {address.address}
                 </Text>
-                <Button warning rounded >
-                  Delete location
+                <Button onPress={this._onPress} warning rounded value={address.location_id}>
+                  Delete
                 </Button>
               </CardItem>
             </Card>
@@ -39,6 +37,7 @@ class UserPage extends Component {
         })}
       </View>
     )
+  }
   }
   render(){
     return(

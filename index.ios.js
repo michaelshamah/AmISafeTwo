@@ -25,7 +25,7 @@ class AmISafeTwo extends Component {
       text: '',
       user: undefined,
       user_id: undefined,
-      locations:[]
+      locations: []
     };
   }
   componentDidMount() {
@@ -42,6 +42,7 @@ class AmISafeTwo extends Component {
           let lastfive=[]
           let i= data.length-1
           while (i >= 0){
+            console.log(i)
             lastfive.push(data[i])
             i--
             if (i<= data.length-6){
@@ -49,30 +50,39 @@ class AmISafeTwo extends Component {
             }
           }
           here.setState({data: lastfive})
+          ajax.getLocations(this.state.user_id).then(data=>{
+            console.log(data)
+            here.setState({locations: data})
+            console.log(this.state.locations)
+          })
         })
       }
     )
   }
 
-   loggedIn(user) {
+  loggedIn(user) {
     console.log(user)
     this.setState({user: user.name,
       user_id: user.user})
     console.log('logginin', this.state.user)
   }
+
   loggedInGuest(user) {
     console.log(user)
     this.setState({user: user})
   }
+
   loggedOut() {
     this.setState({user: undefined,
       user_id: undefined})
   }
-  getLocations(){
+
+  locations(){
     let here=this
-    ajax.getLocations(this.props.user_id).then(data=>{
+    ajax.getLocations(this.state.user_id).then(data=>{
       console.log(data)
       here.setState({locations: data})
+      console.log(this.state.locations)
     })
   }
   render() {
@@ -109,7 +119,7 @@ class AmISafeTwo extends Component {
               });
             }}>
             <Search data={this.state.data} long={this.state.longitude}
-            lat={this.state.latitude} user={this.state.user_id} />
+            lat={this.state.latitude} user={this.state.user_id} getLocations={this.locations.bind(this)}/>
           </TabBarIOS.Item>
           <TabBarIOS.Item
             systemIcon="contacts"
@@ -119,7 +129,7 @@ class AmISafeTwo extends Component {
                 selectedTab: 'tab2',
               });
             }}>
-            <UserPage user={this.state.user} user_id={this.state.user_id} loggedOut= {this.loggedOut.bind(this)} />
+            <UserPage user={this.state.user} locations={this.state.locations} getLocations={this.locations.bind(this)} loggedOut= {this.loggedOut.bind(this)} />
           </TabBarIOS.Item>
           </TabBarIOS>
 
